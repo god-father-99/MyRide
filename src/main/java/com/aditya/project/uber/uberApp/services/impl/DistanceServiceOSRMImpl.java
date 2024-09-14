@@ -20,13 +20,13 @@ public class DistanceServiceOSRMImpl implements DistanceService {
         try{
             String URI=src.getX()+","+src.getY()+";"+dest.getX()+","+dest.getY();
             OSRMResponseDto osrmResponseDto=RestClient.builder()
-                    .baseUrl("OSRM_API_BASE_URL")
+                    .baseUrl(OSRM_API_BASE_URL)
                     .build()
                     .get()
                     .uri(URI)
                     .retrieve()
                     .body(OSRMResponseDto.class);
-            return osrmResponseDto.getRoutes().get(0).getDistance();
+            return osrmResponseDto.getRoutes().get(0).getDistance()/1000.0;
         }
         catch(Exception e){
             throw new RuntimeException("Error calculating distance from OSRM , "+e.getMessage());
