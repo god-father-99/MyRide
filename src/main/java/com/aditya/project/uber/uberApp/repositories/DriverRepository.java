@@ -1,0 +1,30 @@
+package com.aditya.project.uber.uberApp.repositories;
+
+import com.aditya.project.uber.uberApp.entities.Driver;
+import org.locationtech.jts.geom.Point;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+
+
+//postGIS methods(ST_Distance(Point1,Point2),ST_Dwithin(Point1,<Diameter_in_meters>))
+@Repository
+public interface DriverRepository extends JpaRepository<Driver,Long> {
+    @Query(value = "SELECT d.*,ST_Distance(d.current_location, :pickupLocation) AS distance " +
+            "FROM DRIVER d " +
+            "WHERE d.available = true AND ST_Dwithin(d.current_location, :pickupLocation,10000) " +
+            "ORDER BY distance " +
+            "limit 10",nativeQuery = true
+    )
+    List<Driver> findTenNearestDriver(Point pickupLocation);
+
+    @Query(value = "SELECT d.* " +
+            "FROM DRIVER d " +
+            "WHERE d.available = true AND ST_Dwithin(d.current_location, :pickupLocation,15000) " +
+            "ORDER BY d.rating DESC " +
+            "limit 10",nativeQuery = true)
+    List<Driver> findTenNearestTopRatedDriver(Point pickupLocation);
+}
