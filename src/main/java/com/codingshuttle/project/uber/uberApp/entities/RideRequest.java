@@ -1,8 +1,7 @@
-package com.aditya.project.uber.uberApp.entities;
+package com.codingshuttle.project.uber.uberApp.entities;
 
-
-import com.aditya.project.uber.uberApp.entities.enums.PaymentMethod;
-import com.aditya.project.uber.uberApp.entities.enums.RideRequestStatus;
+import com.codingshuttle.project.uber.uberApp.entities.enums.PaymentMethod;
+import com.codingshuttle.project.uber.uberApp.entities.enums.RideRequestStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class RideRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +34,8 @@ public class RideRequest {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    private Double fare;
-
     @Enumerated(EnumType.STRING)
     private RideRequestStatus rideRequestStatus;
+
+    private Double fare;
 }

@@ -15,7 +15,7 @@ public class DistanceServiceOSRMImpl implements DistanceService {
     private static final String OSRM_API_BASE_URL="http://router.project-osrm.org/route/v1/driving/";
 
     @Override
-    public Double calculateDistance(Point src, Point dest) {
+    public double calculateDistance(Point src, Point dest) {
         //call the third party api OSRM
         try{
             String URI=src.getX()+","+src.getY()+";"+dest.getX()+","+dest.getY();
@@ -26,7 +26,7 @@ public class DistanceServiceOSRMImpl implements DistanceService {
                     .uri(URI)
                     .retrieve()
                     .body(OSRMResponseDto.class);
-            return osrmResponseDto.getRoutes().get(0).getDistance()/1000.0;
+            return osrmResponseDto.getRoutes().get(0).getDistance() / 1000.0;
         }
         catch(Exception e){
             throw new RuntimeException("Error calculating distance from OSRM , "+e.getMessage());

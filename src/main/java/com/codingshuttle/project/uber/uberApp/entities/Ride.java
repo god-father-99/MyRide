@@ -1,20 +1,24 @@
-package com.aditya.project.uber.uberApp.entities;
+package com.codingshuttle.project.uber.uberApp.entities;
 
-
-import com.aditya.project.uber.uberApp.entities.enums.PaymentMethod;
-import com.aditya.project.uber.uberApp.entities.enums.RideRequestStatus;
+import com.codingshuttle.project.uber.uberApp.entities.enums.PaymentMethod;
+import com.codingshuttle.project.uber.uberApp.entities.enums.RideStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
-public class RideRequest {
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Ride {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,16 +30,24 @@ public class RideRequest {
     private Point dropOffLocation;
 
     @CreationTimestamp
-    private LocalDateTime requestedTime;
+    private LocalDateTime createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Rider rider;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Driver driver;
+
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    private Double fare;
-
     @Enumerated(EnumType.STRING)
-    private RideRequestStatus rideRequestStatus;
+    private RideStatus rideStatus;
+
+    private String otp;
+
+    private Double fare;
+    private LocalDateTime startedAt;
+    private LocalDateTime endedAt;
+
 }
