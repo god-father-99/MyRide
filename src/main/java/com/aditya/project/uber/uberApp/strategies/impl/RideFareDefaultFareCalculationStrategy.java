@@ -1,9 +1,6 @@
 package com.aditya.project.uber.uberApp.strategies.impl;
 
-import com.aditya.project.uber.uberApp.dto.RideRequestDto;
 import com.aditya.project.uber.uberApp.entities.RideRequest;
-import com.aditya.project.uber.uberApp.services.DistanceService;
-import com.aditya.project.uber.uberApp.services.impl.DistanceServiceOSRMImpl;
 import com.aditya.project.uber.uberApp.strategies.DistanceApiManager;
 import com.aditya.project.uber.uberApp.strategies.RideFareCalculationStrategy;
 import lombok.RequiredArgsConstructor;

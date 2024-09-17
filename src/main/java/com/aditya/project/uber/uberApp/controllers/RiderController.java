@@ -4,9 +4,11 @@ package com.aditya.project.uber.uberApp.controllers;
 import com.aditya.project.uber.uberApp.dto.RideRequestDto;
 import com.aditya.project.uber.uberApp.services.RiderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
