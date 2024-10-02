@@ -4,6 +4,7 @@ package com.aditya.project.uber.uberApp.services.impl;
 import com.aditya.project.uber.uberApp.services.DistanceService;
 import lombok.Data;
 import org.locationtech.jts.geom.Point;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,8 @@ import java.util.List;
 public class DistanceServiceOlaImpl implements DistanceService {
 
     private static final String OLA_BASE_URL="https://api.olamaps.io/routing/v1/distanceMatrix";
-    private static final String API_KEY="Q8RqHFEL9VKxAe5QPjTo4Fi1rrvU9zAf5X34TPEu";
+    @Value("${API_KEY}")
+    private String API_KEY;
     @Override
     public double calculateDistance(Point p1, Point p2) {
         try{
