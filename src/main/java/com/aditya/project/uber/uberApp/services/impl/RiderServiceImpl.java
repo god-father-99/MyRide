@@ -3,6 +3,7 @@ package com.aditya.project.uber.uberApp.services.impl;
 import com.aditya.project.uber.uberApp.dto.RideDto;
 import com.aditya.project.uber.uberApp.dto.RideRequestDto;
 import com.aditya.project.uber.uberApp.dto.RiderDto;
+import com.aditya.project.uber.uberApp.entities.Driver;
 import com.aditya.project.uber.uberApp.entities.RideRequest;
 import com.aditya.project.uber.uberApp.entities.Rider;
 import com.aditya.project.uber.uberApp.entities.User;
@@ -12,11 +13,11 @@ import com.aditya.project.uber.uberApp.repositories.RideRequestRepository;
 import com.aditya.project.uber.uberApp.repositories.RiderRepository;
 import com.aditya.project.uber.uberApp.services.RiderService;
 import com.aditya.project.uber.uberApp.strategies.RideStrategyManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,15 +34,17 @@ public class RiderServiceImpl implements RiderService {
     @Override
     @Transactional
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
-       Rider rider=getCurrentRider();
-       RideRequest rideRequest = modelMapper.map(rideRequestDto, RideRequest.class);
-       rideRequest.setRider(rider);
-       rideRequest.setRideRequestStatus(RideRequestStatus.PENDING);
-       Double fare =rideStrategyManager.rideFareCalculationStrategy().calculateRideFare(rideRequest);
-       rideRequest.setFare(fare);
-       RideRequest savedRideRequest=rideRequestRepository.save(rideRequest);
-       rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDrivers(rideRequest);
-       return modelMapper.map(savedRideRequest,RideRequestDto.class);
+        Rider rider=getCurrentRider();
+        RideRequest rideRequest = modelMapper.map(rideRequestDto, RideRequest.class);
+        rideRequest.setRider(rider);
+        rideRequest.setRideRequestStatus(RideRequestStatus.PENDING);
+        Double fare =rideStrategyManager.rideFareCalculationStrategy().calculateRideFare(rideRequest);
+        rideRequest.setFare(fare);
+        RideRequest savedRideRequest=rideRequestRepository.save(rideRequest);
+
+        //TODO : Send the notification to drivers about the ride request
+        List<Driver> driver=rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDrivers(rideRequest);
+        return modelMapper.map(savedRideRequest,RideRequestDto.class);
 
 
     }
