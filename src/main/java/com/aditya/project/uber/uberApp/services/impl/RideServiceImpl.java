@@ -4,9 +4,11 @@ import com.aditya.project.uber.uberApp.dto.RideRequestDto;
 import com.aditya.project.uber.uberApp.entities.Driver;
 import com.aditya.project.uber.uberApp.entities.Ride;
 import com.aditya.project.uber.uberApp.entities.RideRequest;
+import com.aditya.project.uber.uberApp.entities.Rider;
 import com.aditya.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.aditya.project.uber.uberApp.entities.enums.RideStatus;
 import com.aditya.project.uber.uberApp.exceptions.ResourceNotFoundException;
+import com.aditya.project.uber.uberApp.repositories.DriverRepository;
 import com.aditya.project.uber.uberApp.repositories.RideRepository;
 import com.aditya.project.uber.uberApp.services.RideRequestService;
 import com.aditya.project.uber.uberApp.services.RideService;
@@ -26,6 +28,7 @@ public class RideServiceImpl implements RideService {
     private final RideRequestService rideRequestService;
     private final ModelMapper modelMapper;
     private final RideRepository rideRepository;
+    private final DriverRepository driverRepository;
 
     @Override
     public Ride getRideById(Long rideId) {
@@ -58,13 +61,13 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public Page<Ride> getAllRideOfDriver(Long driverId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRideOfDriver(Driver driver, PageRequest pageRequest) {
+        return rideRepository.findByDriver(driver,pageRequest);
     }
 
     @Override
-    public Page<Ride> getAllRideOfRider(Long riderId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRideOfRider(Rider rider, PageRequest pageRequest) {
+        return rideRepository.findByRider(rider,pageRequest);
     }
 
     private String generateRandomOTP(){

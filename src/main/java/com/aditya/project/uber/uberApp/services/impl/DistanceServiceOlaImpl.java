@@ -34,7 +34,8 @@ public class DistanceServiceOlaImpl implements DistanceService {
                     .headers(httpHeaders -> httpHeaders.addAll(headers))
                     .retrieve()
                     .body(OLAResponseDto.class);
-            return olaResponseDto.getRows().get(0).getElements().get(0).getDistance() /1000.0;
+            assert olaResponseDto != null;
+            return olaResponseDto.getRows().getFirst().getElements().getFirst().getDistance() /1000.0;
         }
         catch(Exception e){
             throw new RuntimeException("Error calculating distance from OLA , "+ e.getMessage());

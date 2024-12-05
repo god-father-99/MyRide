@@ -4,6 +4,8 @@ import com.aditya.project.uber.uberApp.dto.DriverDto;
 import com.aditya.project.uber.uberApp.dto.RideDto;
 import com.aditya.project.uber.uberApp.dto.RiderDto;
 import com.aditya.project.uber.uberApp.entities.Driver;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ public interface DriverService {
     RideDto endRide(Long rideId);
     RiderDto rateRider(Long rideId,Integer rating);
     DriverDto getMyProfile();
-    List<RideDto> getAllMyRides();
+    Page<RideDto> getAllMyRides(PageRequest pageRequest);
     Driver getCurrentDriver();
+    Driver updateDriverAvailability(Driver driver);
 }

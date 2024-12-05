@@ -21,6 +21,8 @@ public class Driver {
 
     private boolean available;
 
+    private String vehicleId;
+
     @Column(columnDefinition = "Geometry(Point,4326)")
     private Point currentLocation;
 }

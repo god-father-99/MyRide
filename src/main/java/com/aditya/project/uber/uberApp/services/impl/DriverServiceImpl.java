@@ -16,6 +16,8 @@ import com.aditya.project.uber.uberApp.services.RideService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -50,7 +52,15 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public RideDto cancelRide(Long rideId) {
-        return null;
+        Ride ride=rideService.getRideById(rideId);
+        Driver driver=getCurrentDriver();
+        if(!driver.equals(ride.getDriver()))
+            throw new RuntimeException("Driver cannot start a ride as he had not accepted the ride");
+        if(!ride.getRideRequestStatus().equals(RideRequestStatus.CONFIRMED))
+            throw new RuntimeException("Ride cannot be cancelled, invalid status : "+ride.getRideRequestStatus());
+        rideService.updateRideStatus(ride, RideStatus.CANCELLED);
+        updateDriverAvailability(driver);
+        return modelMapper.map(ride, RideDto.class);
     }
 
     @Override
@@ -80,16 +90,25 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public DriverDto getMyProfile() {
-        return null;
+        Driver driver=getCurrentDriver();
+        return modelMapper.map(driver, DriverDto.class);
     }
 
     @Override
-    public List<RideDto> getAllMyRides() {
-        return List.of();
+    public Page<RideDto> getAllMyRides(PageRequest pageRequest) {
+        Driver driver=getCurrentDriver();
+        return rideService.getAllRideOfDriver(driver, pageRequest).map(ride -> modelMapper.map(ride, RideDto.class));
+    }
+
+    @Override
+    public Driver updateDriverAvailability(Driver driver) {
+        driver.setAvailable(true);
+        return driverRepository.save(driver);
     }
 
     @Override
     public Driver getCurrentDriver() {
         return driverRepository.findById(3L).orElseThrow(()->new ResourceNotFoundException("Driver not found with id : "+3));
     }
+
 }
